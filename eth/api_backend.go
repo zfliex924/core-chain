@@ -38,6 +38,7 @@ import (
 	"github.com/ethereum/go-ethereum/miner"
 	"github.com/ethereum/go-ethereum/params"
 	"github.com/ethereum/go-ethereum/rpc"
+	lru "github.com/hashicorp/golang-lru"
 )
 
 // EthAPIBackend implements ethapi.Backend for full nodes
@@ -46,6 +47,7 @@ type EthAPIBackend struct {
 	allowUnprotectedTxs bool
 	eth                 *Ethereum
 	gpo                 *gasprice.Oracle
+	txCache 			*lru.Cache
 }
 
 // ChainConfig returns the active chain configuration.
@@ -252,8 +254,23 @@ func (b *EthAPIBackend) GetPoolTransaction(hash common.Hash) *types.Transaction 
 	return b.eth.txPool.Get(hash)
 }
 
+type TxCacheItem struct {
+	tx         *types.Transaction
+	BlockHash  common.Hash
+	BlockIndex uint64
+	Index      uint64
+}
+
 func (b *EthAPIBackend) GetTransaction(ctx context.Context, txHash common.Hash) (*types.Transaction, common.Hash, uint64, uint64, error) {
+	if lookup, exist := b.txCache.Get(txHash); exist {
+		item := lookup.(*TxCacheItem)
+		return item.tx, item.BlockHash, item.BlockIndex, item.Index, nil
+	}
 	tx, blockHash, blockNumber, index := rawdb.ReadTransaction(b.eth.ChainDb(), txHash)
+	if tx != nil {
+		lookup := &TxCacheItem{tx: tx, BlockHash: blockHash, BlockIndex: blockNumber, Index: index}
+		b.txCache.Add(txHash, lookup)
+	}
 	return tx, blockHash, blockNumber, index, nil
 }
 
