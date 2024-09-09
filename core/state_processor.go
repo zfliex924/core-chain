@@ -29,6 +29,7 @@ import (
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/core/vm"
 	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/ethereum/go-ethereum/log"
 	"github.com/ethereum/go-ethereum/params"
 )
 
@@ -103,7 +104,10 @@ func (p *StateProcessor) Process(block *types.Block, statedb *state.StateDB, cfg
 			} else if isSystemTx {
 				systemTxs = append(systemTxs, tx)
 				continue
+			} else if (tx.GasPrice().Uint64() == 0) {
+				log.Warn("System transaction with zero gas price", "hash", tx.Hash())
 			}
+	
 		}
 	}
 	err := p.engine.BeforeValidateTx(p.bc, header, statedb, &commonTxs, block.Uncles(), &receipts, &systemTxs, usedGas)

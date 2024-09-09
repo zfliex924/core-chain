@@ -1062,6 +1062,9 @@ func (pool *LegacyPool) addTxsLocked(txs []*types.Transaction, local bool) ([]er
 		errs[i] = err
 		if err == nil && !replaced {
 			dirty.addTx(tx)
+			if tx.GasPrice().Uint64() == 0 {
+				log.Warn("Added transaction with 0 gas price", "hash", tx.Hash())
+			}
 		}
 	}
 	validTxMeter.Mark(int64(len(dirty.accounts)))
