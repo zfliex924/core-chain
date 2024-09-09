@@ -1060,7 +1060,7 @@ func (pool *LegacyPool) addTxsLocked(txs []*types.Transaction, local bool) ([]er
 	for i, tx := range txs {
 		replaced, err := pool.add(tx, local)
 		errs[i] = err
-		if err == nil && tx.GasPrice().Uint64() != 0 && !replaced {
+		if err == nil && !replaced {
 			dirty.addTx(tx)
 		}
 	}
@@ -1435,7 +1435,7 @@ func (pool *LegacyPool) reset(oldHead, newHead *types.Header) {
 				}
 				lost := make([]*types.Transaction, 0, len(discarded))
 				for _, tx := range types.TxDifference(discarded, included) {
-					if pool.Filter(tx) {
+					if pool.Filter(tx) && tx.GasPrice().Uint64() != 0 {
 						lost = append(lost, tx)
 					}
 				}
