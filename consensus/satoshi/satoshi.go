@@ -730,7 +730,7 @@ func (p *Satoshi) BeforeValidateTx(chain consensus.ChainHeaderReader, header *ty
 			systemcontracts.BTCLSTTokenContract,
 		}
 
-		p.initContractWithContracts(state, header, cx, txs, receipts, nil, &header.GasUsed, false, contracts)
+		p.initContractWithContracts(state, header, cx, txs, receipts, systemTxs, &header.GasUsed, false, contracts)
 	}
 
 	// If the block is the last one in a round, execute turn round to update the validator set.
