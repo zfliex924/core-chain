@@ -29,6 +29,7 @@ type upgradeHook func(blockNumber *big.Int, contractAddr common.Address, statedb
 const (
 	mainNet    = "Mainnet"
 	buffaloNet = "Buffalo"
+	devNet     = "DEV"
 	defaultNet = "Default"
 )
 
@@ -244,7 +245,7 @@ func init() {
 			},
 		},
 	}
-	demeterUpgrade[buffaloNet] = &Upgrade{
+	demeterUpgrade[devNet] = &Upgrade{
 		UpgradeName: "demeter",
 		Configs: []*UpgradeConfig{
 			{
@@ -347,6 +348,8 @@ func UpgradeBuildInSystemContract(config *params.ChainConfig, blockNumber *big.I
 		network = mainNet
 	case params.BuffaloGenesisHash:
 		network = buffaloNet
+	case params.DEVGenesisHash:
+		network = devNet
 	default:
 		network = defaultNet
 	}
