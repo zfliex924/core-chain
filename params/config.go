@@ -29,6 +29,7 @@ var (
 
 	CoreGenesisHash    = common.HexToHash("0xf7fc87f11e61508a5828cd1508060ed1714c8d32a92744ae10acb43c953357ad")
 	BuffaloGenesisHash = common.HexToHash("0xd90508c51efd64e75363cdf51114d9f2a90a79e6cd0f78f3c3038b47695c034a")
+	DEVGenesisHash = common.HexToHash("0x258e2eb1138263135b3d79dabb358ab9e4b1c5e0c9d39403c8a06f418c55b9e2")
 )
 
 func newUint64(val uint64) *uint64 { return &val }
@@ -153,6 +154,33 @@ var (
 			Period: 3,
 			Epoch:  200,
 			Round:  86400,
+		},
+	}
+
+	DEVChainConfig = &ChainConfig{
+		ChainID:             big.NewInt(1112),
+		HomesteadBlock:      big.NewInt(0),
+		EIP150Block:         big.NewInt(0),
+		EIP155Block:         big.NewInt(0),
+		EIP158Block:         big.NewInt(0),
+		ByzantiumBlock:      big.NewInt(0),
+		ConstantinopleBlock: big.NewInt(0),
+		PetersburgBlock:     big.NewInt(0),
+		IstanbulBlock:       big.NewInt(0),
+		MuirGlacierBlock:    big.NewInt(0),
+		HashPowerBlock:      big.NewInt(0),
+		ZeusBlock:           big.NewInt(0),
+		HeraBlock:           big.NewInt(0),
+		PoseidonBlock:       big.NewInt(0),
+		BerlinBlock:         big.NewInt(111922),
+		LondonBlock:         big.NewInt(111922),
+		HertzBlock:          big.NewInt(111922),
+		ShanghaiTime:        newUint64(1725859800),
+		DemeterTime:         newUint64(1725859800),
+		Satoshi: &SatoshiConfig{
+			Period: 3,
+			Epoch:  20,
+			Round:  1800,
 		},
 	}
 
@@ -332,6 +360,8 @@ func GetBuiltInChainConfig(ghash common.Hash) *ChainConfig {
 		return CoreChainConfig
 	case BuffaloGenesisHash:
 		return BuffaloChainConfig
+	case DEVGenesisHash:
+		return DEVChainConfig
 	default:
 		return nil
 	}
