@@ -730,7 +730,7 @@ func (p *Satoshi) BeforeValidateTx(chain consensus.ChainHeaderReader, header *ty
 			systemcontracts.BTCLSTTokenContract,
 		}
 
-		err := p.initContractWithContracts(state, header, cx, txs, receipts, systemTxs, &header.GasUsed, false, contracts)
+		err := p.initContractWithContracts(state, header, cx, txs, receipts, systemTxs, usedGas, false, contracts)
 		if err != nil {
 			log.Error("init contract failed")
 		}
