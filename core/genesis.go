@@ -383,7 +383,7 @@ func SetupGenesisBlockWithOverride(db ethdb.Database, triedb *trie.Database, gen
 	// on top of an existing private network genesis block). In that case, only
 	// apply the overrides.
 	if genesis == nil && stored != params.MainnetGenesisHash &&
-		stored != params.BuffaloGenesisHash && stored != params.CoreGenesisHash {
+		stored != params.BuffaloGenesisHash && stored != params.CoreGenesisHash && stored != params.DEVGenesisHash {
 		newcfg = storedcfg
 		applyOverrides(newcfg)
 	}
