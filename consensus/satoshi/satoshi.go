@@ -730,7 +730,10 @@ func (p *Satoshi) BeforeValidateTx(chain consensus.ChainHeaderReader, header *ty
 			systemcontracts.BTCLSTTokenContract,
 		}
 
-		p.initContractWithContracts(state, header, cx, txs, receipts, systemTxs, &header.GasUsed, false, contracts)
+		err := p.initContractWithContracts(state, header, cx, txs, receipts, systemTxs, &header.GasUsed, false, contracts)
+		if err != nil {
+			log.Error("init contract failed")
+		}
 	}
 
 	// If the block is the last one in a round, execute turn round to update the validator set.
@@ -762,7 +765,10 @@ func (p *Satoshi) BeforePackTx(chain consensus.ChainHeaderReader, header *types.
 			systemcontracts.BTCLSTTokenContract,
 		}
 
-		p.initContractWithContracts(state, header, cx, txs, receipts, nil, &header.GasUsed, true, contracts)
+		err := p.initContractWithContracts(state, header, cx, txs, receipts, nil, &header.GasUsed, true, contracts)
+		if err != nil {
+			log.Error("init contract failed")
+		}
 	}
 
 	// If the block is the last one in a round, execute turn round to update the validator set.
