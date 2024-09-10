@@ -175,9 +175,9 @@ var (
 		BerlinBlock:         big.NewInt(109466),
 		LondonBlock:         big.NewInt(109466),
 		HertzBlock:          big.NewInt(109466),
-		ShanghaiTime:        newUint64(1725950400),
-		KeplerTime:          newUint64(1725950400),
-		DemeterTime:         newUint64(1725950400),
+		ShanghaiTime:        newUint64(1725952200),
+		KeplerTime:          newUint64(1725952200),
+		DemeterTime:         newUint64(1725952200),
 		Satoshi: &SatoshiConfig{
 			Period: 3,
 			Epoch:  20,
