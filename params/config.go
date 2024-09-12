@@ -29,7 +29,7 @@ var (
 
 	CoreGenesisHash    = common.HexToHash("0xf7fc87f11e61508a5828cd1508060ed1714c8d32a92744ae10acb43c953357ad")
 	BuffaloGenesisHash = common.HexToHash("0xd90508c51efd64e75363cdf51114d9f2a90a79e6cd0f78f3c3038b47695c034a")
-	DEVGenesisHash = common.HexToHash("0x258e2eb1138263135b3d79dabb358ab9e4b1c5e0c9d39403c8a06f418c55b9e2")
+	DEVGenesisHash = common.HexToHash("0xd62d24ec5ca74a98c3ae9a5f33e9592442fa3f18886b13d987e7799e3d822f04")
 )
 
 func newUint64(val uint64) *uint64 { return &val }
@@ -172,12 +172,12 @@ var (
 		ZeusBlock:           big.NewInt(0),
 		HeraBlock:           big.NewInt(0),
 		PoseidonBlock:       big.NewInt(0),
-		BerlinBlock:         big.NewInt(109466),
-		LondonBlock:         big.NewInt(109466),
-		HertzBlock:          big.NewInt(109466),
-		ShanghaiTime:        newUint64(1725952200),
-		KeplerTime:          newUint64(1725952200),
-		DemeterTime:         newUint64(1725952200),
+		BerlinBlock:         big.NewInt(2600),
+		LondonBlock:         big.NewInt(2600),
+		HertzBlock:          big.NewInt(2600),
+		ShanghaiTime:        newUint64(1726130400),
+		KeplerTime:          newUint64(1726130400),
+		DemeterTime:         newUint64(1726130400),
 		Satoshi: &SatoshiConfig{
 			Period: 3,
 			Epoch:  20,
