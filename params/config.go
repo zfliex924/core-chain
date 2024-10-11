@@ -158,7 +158,7 @@ var (
 	}
 
 	DEVChainConfig = &ChainConfig{
-		ChainID:             big.NewInt(1112),
+		ChainID:             big.NewInt(1111),
 		HomesteadBlock:      big.NewInt(0),
 		EIP150Block:         big.NewInt(0),
 		EIP155Block:         big.NewInt(0),
@@ -175,9 +175,9 @@ var (
 		BerlinBlock:         big.NewInt(24460),
 		LondonBlock:         big.NewInt(24460),
 		HertzBlock:          big.NewInt(24460),
-		ShanghaiTime:        newUint64(1728616226),
-		KeplerTime:          newUint64(1728616226),
-		DemeterTime:         newUint64(1728616226),
+		ShanghaiTime:        newUint64(1728617126),
+		KeplerTime:          newUint64(1728617126),
+		DemeterTime:         newUint64(1728617126),
 		Satoshi: &SatoshiConfig{
 			Period: 3,
 			Epoch:  20,
