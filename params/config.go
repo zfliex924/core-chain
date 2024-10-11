@@ -29,7 +29,7 @@ var (
 
 	CoreGenesisHash    = common.HexToHash("0xf7fc87f11e61508a5828cd1508060ed1714c8d32a92744ae10acb43c953357ad")
 	BuffaloGenesisHash = common.HexToHash("0xd90508c51efd64e75363cdf51114d9f2a90a79e6cd0f78f3c3038b47695c034a")
-	DEVGenesisHash = common.HexToHash("0x258e2eb1138263135b3d79dabb358ab9e4b1c5e0c9d39403c8a06f418c55b9e2")
+	DEVGenesisHash = common.HexToHash("0x2093bc15e4ac1967b9d7172d61a5ca03826b7cadc4b174521e2ea5c7e95f9fbf")
 )
 
 func newUint64(val uint64) *uint64 { return &val }
