@@ -732,7 +732,7 @@ func (p *Satoshi) BeforeValidateTx(chain consensus.ChainHeaderReader, header *ty
 
 		err := p.initContractWithContracts(state, header, cx, txs, receipts, systemTxs, usedGas, false, contracts)
 		if err != nil {
-			log.Error("init contract failed")
+			log.Error("init contract failed on demeter fork")
 		}
 	}
 
@@ -767,7 +767,7 @@ func (p *Satoshi) BeforePackTx(chain consensus.ChainHeaderReader, header *types.
 
 		err := p.initContractWithContracts(state, header, cx, txs, receipts, nil, &header.GasUsed, true, contracts)
 		if err != nil {
-			log.Error("init contract failed")
+			log.Error("init contract failed on demeter fork")
 		}
 	}
 
