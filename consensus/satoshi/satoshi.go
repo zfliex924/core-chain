@@ -455,13 +455,8 @@ func (p *Satoshi) verifyCascadingFields(chain consensus.ChainHeaderReader, heade
 		return err
 	}
 
-	snap, err := p.snapshot(chain, number-1, header.ParentHash, parents)
-	if err != nil {
-		return err
-	}
-
 	// blockTimeVerify
-	if header.Time < parent.Time+p.config.Period+p.backOffTime(snap, header, header.Coinbase) {
+	if header.Time < parent.Time+p.config.Period {
 		return consensus.ErrFutureBlock
 	}
 
@@ -632,9 +627,9 @@ func (p *Satoshi) verifySeal(chain consensus.ChainHeaderReader, header *types.He
 		return errCoinBaseMisMatch
 	}
 
-	if _, ok := snap.Validators[signer]; !ok {
-		return errUnauthorizedValidator(signer.String())
-	}
+	// if _, ok := snap.Validators[signer]; !ok {
+	// 	return errUnauthorizedValidator(signer.String())
+	// }
 
 	for seen, recent := range snap.Recents {
 		if recent == signer {
@@ -684,7 +679,7 @@ func (p *Satoshi) Prepare(chain consensus.ChainHeaderReader, header *types.Heade
 	if parent == nil {
 		return consensus.ErrUnknownAncestor
 	}
-	header.Time = parent.Time + p.config.Period + p.backOffTime(snap, header, p.val)
+	header.Time = parent.Time + p.config.Period
 	if header.Time < uint64(time.Now().Unix()) {
 		header.Time = uint64(time.Now().Unix())
 	}
@@ -894,7 +889,10 @@ func (p *Satoshi) FinalizeAndAssemble(chain consensus.ChainHeaderReader, header 
 			}
 		}
 	}
-	err := p.distributeIncoming(p.val, state, header, cx, &txs, &receipts, nil, &header.GasUsed, true)
+	snap, _ := p.snapshot(chain, header.Number.Uint64() -1, header.ParentHash, nil)
+	validators := snap.validators()
+	val := validators[int(header.Number.Uint64())%len(validators)]
+	err := p.distributeIncoming(val, state, header, cx, &txs, &receipts, nil, &header.GasUsed, true)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -980,9 +978,9 @@ func (p *Satoshi) Seal(chain consensus.ChainHeaderReader, block *types.Block, re
 	}
 
 	// Bail out if we're unauthorized to sign a block
-	if _, authorized := snap.Validators[val]; !authorized {
-		return errUnauthorizedValidator(val.String())
-	}
+	// if _, authorized := snap.Validators[val]; !authorized {
+	// 	return errUnauthorizedValidator(val.String())
+	// }
 
 	// If we're amongst the recent signers, wait for the next block
 	for seen, recent := range snap.Recents {

@@ -27,7 +27,6 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/consensus"
 	"github.com/ethereum/go-ethereum/consensus/misc/eip1559"
-	"github.com/ethereum/go-ethereum/consensus/satoshi"
 	"github.com/ethereum/go-ethereum/core"
 	"github.com/ethereum/go-ethereum/core/state"
 	"github.com/ethereum/go-ethereum/core/systemcontracts"
@@ -418,23 +417,23 @@ func (w *worker) newWorkLoop(recommit time.Duration) {
 			}
 			clearPending(head.Block.NumberU64())
 			timestamp = time.Now().Unix()
-			if p, ok := w.engine.(*satoshi.Satoshi); ok {
-				signedRecent, err := p.SignRecently(w.chain, head.Block)
-				if err != nil {
-					log.Debug("Not allowed to propose block", "err", err)
-					if p.IsRoundEnd(w.chain, head.Block.Header()) {
-						commit(commitInterruptNewHead)
-					}
-					continue
-				}
-				if signedRecent {
-					log.Info("Signed recently, must wait")
-					if p.IsRoundEnd(w.chain, head.Block.Header()) {
-						commit(commitInterruptNewHead)
-					}
-					continue
-				}
-			}
+			// if p, ok := w.engine.(*satoshi.Satoshi); ok {
+			// 	signedRecent, err := p.SignRecently(w.chain, head.Block)
+			// 	if err != nil {
+			// 		log.Debug("Not allowed to propose block", "err", err)
+			// 		if p.IsRoundEnd(w.chain, head.Block.Header()) {
+			// 			commit(commitInterruptNewHead)
+			// 		}
+			// 		continue
+			// 	}
+			// 	if signedRecent {
+			// 		log.Info("Signed recently, must wait")
+			// 		if p.IsRoundEnd(w.chain, head.Block.Header()) {
+			// 			commit(commitInterruptNewHead)
+			// 		}
+			// 		continue
+			// 	}
+			// }
 			commit(commitInterruptNewHead)
 
 		case <-timer.C:
