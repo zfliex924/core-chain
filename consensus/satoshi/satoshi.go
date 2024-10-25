@@ -983,15 +983,15 @@ func (p *Satoshi) Seal(chain consensus.ChainHeaderReader, block *types.Block, re
 	// }
 
 	// If we're amongst the recent signers, wait for the next block
-	for seen, recent := range snap.Recents {
-		if recent == val {
-			// Signer is among recents, only wait if the current block doesn't shift it out
-			if limit := uint64(len(snap.Validators)/2 + 1); number < limit || seen > number-limit {
-				log.Info("Signed recently, must wait for others")
-				return nil
-			}
-		}
-	}
+	// for seen, recent := range snap.Recents {
+	// 	if recent == val {
+	// 		// Signer is among recents, only wait if the current block doesn't shift it out
+	// 		if limit := uint64(len(snap.Validators)/2 + 1); number < limit || seen > number-limit {
+	// 			log.Info("Signed recently, must wait for others")
+	// 			return nil
+	// 		}
+	// 	}
+	// }
 
 	// Sweet, the protocol permits us to sign the block, wait for our time
 	delay := time.Until(time.Unix(int64(header.Time), 0))
