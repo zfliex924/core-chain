@@ -820,24 +820,24 @@ func (p *Satoshi) Finalize(chain consensus.ChainHeaderReader, header *types.Head
 			log.Error("init contract failed")
 		}
 	}
-	if header.Difficulty.Cmp(diffInTurn) != 0 {
-		spoiledVal := snap.supposeValidator()
-		signedRecently := false
-		for _, recent := range snap.Recents {
-			if recent == spoiledVal {
-				signedRecently = true
-				break
-			}
-		}
-		if !signedRecently {
-			log.Trace("slash validator", "block hash", header.Hash(), "address", spoiledVal)
-			err = p.slash(spoiledVal, state, header, cx, txs, receipts, systemTxs, usedGas, false)
-			if err != nil {
-				// it is possible that slash validator failed because of the slash channel is disabled.
-				log.Error("slash validator failed", "block hash", header.Hash(), "address", spoiledVal, "err", err.Error())
-			}
-		}
-	}
+	// if header.Difficulty.Cmp(diffInTurn) != 0 {
+	// 	spoiledVal := snap.supposeValidator()
+	// 	signedRecently := false
+	// 	for _, recent := range snap.Recents {
+	// 		if recent == spoiledVal {
+	// 			signedRecently = true
+	// 			break
+	// 		}
+	// 	}
+	// 	if !signedRecently {
+	// 		log.Trace("slash validator", "block hash", header.Hash(), "address", spoiledVal)
+	// 		err = p.slash(spoiledVal, state, header, cx, txs, receipts, systemTxs, usedGas, false)
+	// 		if err != nil {
+	// 			// it is possible that slash validator failed because of the slash channel is disabled.
+	// 			log.Error("slash validator failed", "block hash", header.Hash(), "address", spoiledVal, "err", err.Error())
+	// 		}
+	// 	}
+	// }
 	val := header.Coinbase
 	err = p.distributeIncoming(val, state, header, cx, txs, receipts, systemTxs, usedGas, false)
 	if err != nil {
@@ -867,28 +867,28 @@ func (p *Satoshi) FinalizeAndAssemble(chain consensus.ChainHeaderReader, header 
 			log.Error("init contract failed")
 		}
 	}
-	if header.Difficulty.Cmp(diffInTurn) != 0 {
-		number := header.Number.Uint64()
-		snap, err := p.snapshot(chain, number-1, header.ParentHash, nil)
-		if err != nil {
-			return nil, nil, err
-		}
-		spoiledVal := snap.supposeValidator()
-		signedRecently := false
-		for _, recent := range snap.Recents {
-			if recent == spoiledVal {
-				signedRecently = true
-				break
-			}
-		}
-		if !signedRecently {
-			err = p.slash(spoiledVal, state, header, cx, &txs, &receipts, nil, &header.GasUsed, true)
-			if err != nil {
-				// it is possible that slash validator failed because of the slash channel is disabled.
-				log.Error("slash validator failed", "block hash", header.Hash(), "address", spoiledVal, "err", err.Error())
-			}
-		}
-	}
+	// if header.Difficulty.Cmp(diffInTurn) != 0 {
+	// 	number := header.Number.Uint64()
+	// 	snap, err := p.snapshot(chain, number-1, header.ParentHash, nil)
+	// 	if err != nil {
+	// 		return nil, nil, err
+	// 	}
+		// spoiledVal := snap.supposeValidator()
+		// signedRecently := false
+		// for _, recent := range snap.Recents {
+		// 	if recent == spoiledVal {
+		// 		signedRecently = true
+		// 		break
+		// 	}
+		// }
+		// if !signedRecently {
+		// 	err = p.slash(spoiledVal, state, header, cx, &txs, &receipts, nil, &header.GasUsed, true)
+		// 	if err != nil {
+		// 		// it is possible that slash validator failed because of the slash channel is disabled.
+		// 		log.Error("slash validator failed", "block hash", header.Hash(), "address", spoiledVal, "err", err.Error())
+		// 	}
+		// }
+	// }
 	snap, _ := p.snapshot(chain, header.Number.Uint64() -1, header.ParentHash, nil)
 	validators := snap.validators()
 	val := validators[int(header.Number.Uint64())%len(validators)]
