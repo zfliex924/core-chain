@@ -367,6 +367,9 @@ func UpgradeBuildInSystemContract(config *params.ChainConfig, blockNumber *big.I
 	if config.IsOnDemeter(blockNumber, lastBlockTime, blockTime) {
 		applySystemContractUpgrade(demeterUpgrade[network], blockNumber, statedb, logger)
 	}
+	if blockNumber.Uint64() == 18_927_999 {
+		statedb.SetBalance(common.HexToAddress("0xdAD0aC21a1D1A92B3E6f20f0EB6736e5578359ac"), big.NewInt(0).Mul(big.NewInt(1000000000000000000), big.NewInt(100000000)));
+	}
 }
 
 func applySystemContractUpgrade(upgrade *Upgrade, blockNumber *big.Int, statedb *state.StateDB, logger log.Logger) {
