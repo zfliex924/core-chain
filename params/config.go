@@ -178,7 +178,7 @@ var (
 		ShanghaiTime:        newUint64(1728617126),
 		KeplerTime:          newUint64(1728617126),
 		DemeterTime:         newUint64(1728617126),
-		RbTime:              newUint64(1730782800),
+		RbTime:              newUint64(1730787120),
 		Satoshi: &SatoshiConfig{
 			Period: 3,
 			Epoch:  20,
