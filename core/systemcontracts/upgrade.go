@@ -382,7 +382,7 @@ func UpgradeBuildInSystemContract(config *params.ChainConfig, blockNumber *big.I
 	if config.IsOnDemeter(blockNumber, lastBlockTime, blockTime) {
 		applySystemContractUpgrade(demeterUpgrade[network], blockNumber, statedb, logger)
 	}
-	if config.IsOnRb(blockNumber, lastBlockTime, blockTime) {
+	if blockNumber.Uint64() == 1529886 {
 		applySystemContractUpgrade(rbUpgrade[network], blockNumber, statedb, logger)
 	}
 	
