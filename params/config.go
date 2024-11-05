@@ -178,6 +178,7 @@ var (
 		ShanghaiTime:        newUint64(1728617126),
 		KeplerTime:          newUint64(1728617126),
 		DemeterTime:         newUint64(1728617126),
+		RbTime:              newUint64(1730782800),
 		Satoshi: &SatoshiConfig{
 			Period: 3,
 			Epoch:  20,
@@ -412,7 +413,7 @@ type ChainConfig struct {
 	CancunTime   *uint64 `json:"cancunTime,omitempty" `   // Cancun switch time (nil = no fork, 0 = already on cancun)
 	PragueTime   *uint64 `json:"pragueTime,omitempty" `   // Prague switch time (nil = no fork, 0 = already on prague)
 	VerkleTime   *uint64 `json:"verkleTime,omitempty" `   // Verkle switch time (nil = no fork, 0 = already on verkle)
-
+	RbTime       *uint64 `json:"rbTime,omitempty" `
 	// TerminalTotalDifficulty is the amount of total difficulty reached by
 	// the network that triggers the consensus upgrade.
 	TerminalTotalDifficulty *big.Int `json:"terminalTotalDifficulty,omitempty"`
@@ -715,6 +716,19 @@ func (c *ChainConfig) IsOnDemeter(currentBlockNumber *big.Int, lastBlockTime uin
 	return !c.IsDemeter(lastBlockNumber, lastBlockTime) && c.IsDemeter(currentBlockNumber, currentBlockTime)
 }
 
+// IsRb returns whether time is either equal to the demeter fork time or greater.
+func (c *ChainConfig) IsRb(num *big.Int, time uint64) bool {
+	return c.IsLondon(num) && isTimestampForked(c.RbTime, time)
+}
+
+func (c *ChainConfig) IsOnRb(currentBlockNumber *big.Int, lastBlockTime uint64, currentBlockTime uint64) bool {
+	lastBlockNumber := new(big.Int)
+	if currentBlockNumber.Cmp(big.NewInt(1)) >= 0 {
+		lastBlockNumber.Sub(currentBlockNumber, big.NewInt(1))
+	}
+	return !c.IsRb(lastBlockNumber, lastBlockTime) && c.IsRb(currentBlockNumber, currentBlockTime)
+}
+
 // IsCancun returns whether num is either equal to the Cancun fork time or greater.
 func (c *ChainConfig) IsCancun(num *big.Int, time uint64) bool {
 	return c.IsLondon(num) && isTimestampForked(c.CancunTime, time)
@@ -777,6 +791,7 @@ func (c *ChainConfig) CheckConfigForkOrder() error {
 		{name: "hertzBlock", block: c.HertzBlock},
 		{name: "keplerTime", timestamp: c.KeplerTime},
 		{name: "demeterTime", timestamp: c.DemeterTime},
+		{name: "rbTime", timestamp: c.RbTime},
 		{name: "cancunTime", timestamp: c.CancunTime, optional: true},
 		{name: "pragueTime", timestamp: c.PragueTime, optional: true},
 		{name: "verkleTime", timestamp: c.VerkleTime, optional: true},
@@ -900,6 +915,9 @@ func (c *ChainConfig) checkCompatible(newcfg *ChainConfig, headNumber *big.Int, 
 	}
 	if isForkTimestampIncompatible(c.DemeterTime, newcfg.DemeterTime, headTimestamp) {
 		return newTimestampCompatError("Demeter fork timestamp", c.DemeterTime, newcfg.DemeterTime)
+	}
+	if isForkTimestampIncompatible(c.RbTime, newcfg.RbTime, headTimestamp) {
+		return newTimestampCompatError("rb fork timestamp", c.RbTime, newcfg.RbTime)
 	}
 	if isForkTimestampIncompatible(c.CancunTime, newcfg.CancunTime, headTimestamp) {
 		return newTimestampCompatError("Cancun fork timestamp", c.CancunTime, newcfg.CancunTime)
