@@ -28,7 +28,7 @@ var (
 	MainnetGenesisHash = common.HexToHash("0xd4e56740f876aef8c010b86a40d5f56745a118d0906a34e69aec8c0db1cb8fa3")
 
 	CoreGenesisHash    = common.HexToHash("0xf7fc87f11e61508a5828cd1508060ed1714c8d32a92744ae10acb43c953357ad")
-	BuffaloGenesisHash = common.HexToHash("0xd90508c51efd64e75363cdf51114d9f2a90a79e6cd0f78f3c3038b47695c034a")
+	BuffaloGenesisHash = common.HexToHash("0x38b3efca3f75a31bb403cc62297766ded39aae8944a08c51101edfc9c231c9e4")
 )
 
 func newUint64(val uint64) *uint64 { return &val }
@@ -133,7 +133,7 @@ var (
 	}
 
 	BuffaloChainConfig = &ChainConfig{
-		ChainID:             big.NewInt(1115),
+		ChainID:             big.NewInt(1111),
 		HomesteadBlock:      big.NewInt(0),
 		EIP150Block:         big.NewInt(0),
 		EIP155Block:         big.NewInt(0),
@@ -143,20 +143,20 @@ var (
 		PetersburgBlock:     big.NewInt(0),
 		IstanbulBlock:       big.NewInt(0),
 		MuirGlacierBlock:    big.NewInt(0),
-		HashPowerBlock:      big.NewInt(4_545_256),
-		ZeusBlock:           big.NewInt(12_666_000),
-		HeraBlock:           big.NewInt(16_472_288),
-		PoseidonBlock:       big.NewInt(18_253_800),
-		BerlinBlock:         big.NewInt(24_127_766),
-		LondonBlock:         big.NewInt(24_127_766),
-		HertzBlock:          big.NewInt(24_127_766),
-		ShanghaiTime:        newUint64(1729132200), // 2024-10-17 2:30:00 AM UTC
-		KeplerTime:          newUint64(1729132200),
-		DemeterTime:         newUint64(1729132200),
+		HashPowerBlock:      big.NewInt(0),
+		ZeusBlock:           big.NewInt(0),
+		HeraBlock:           big.NewInt(0),
+		PoseidonBlock:       big.NewInt(0),
+		BerlinBlock:         big.NewInt(900),
+		LondonBlock:         big.NewInt(900),
+		HertzBlock:          big.NewInt(900),
+		ShanghaiTime:        newUint64(1731662100),
+		KeplerTime:          newUint64(1731662100),
+		DemeterTime:         newUint64(1731662100),
 		Satoshi: &SatoshiConfig{
 			Period: 3,
-			Epoch:  200,
-			Round:  86400,
+			Epoch:  20,
+			Round:  1800,
 		},
 	}
 
