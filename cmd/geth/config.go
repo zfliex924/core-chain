@@ -184,9 +184,9 @@ func makeFullNode(ctx *cli.Context) (*node.Node, ethapi.Backend) {
 		v := ctx.Uint64(utils.OverrideCancun.Name)
 		cfg.Eth.OverrideCancun = &v
 	}
-	if ctx.IsSet(utils.OverrideHaber.Name) {
-		v := ctx.Uint64(utils.OverrideHaber.Name)
-		cfg.Eth.OverrideHaber = &v
+	if ctx.IsSet(utils.OverrideAthena.Name) {
+		v := ctx.Uint64(utils.OverrideAthena.Name)
+		cfg.Eth.OverrideAthena = &v
 	}
 	if ctx.IsSet(utils.OverrideVerkle.Name) {
 		v := ctx.Uint64(utils.OverrideVerkle.Name)

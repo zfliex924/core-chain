@@ -71,7 +71,7 @@ func (c Config) MarshalTOML() (interface{}, error) {
 		RPCEVMTimeout           time.Duration
 		RPCTxFeeCap             float64
 		OverrideCancun          *uint64 `toml:",omitempty"`
-		OverrideHaber           *uint64 `toml:",omitempty"`
+		OverrideAthena           *uint64 `toml:",omitempty"`
 		OverrideVerkle          *uint64 `toml:",omitempty"`
 		BlobExtraReserve        uint64
 	}
@@ -130,7 +130,7 @@ func (c Config) MarshalTOML() (interface{}, error) {
 	enc.RPCEVMTimeout = c.RPCEVMTimeout
 	enc.RPCTxFeeCap = c.RPCTxFeeCap
 	enc.OverrideCancun = c.OverrideCancun
-	enc.OverrideHaber = c.OverrideHaber
+	enc.OverrideAthena = c.OverrideAthena
 	enc.OverrideVerkle = c.OverrideVerkle
 	enc.BlobExtraReserve = c.BlobExtraReserve
 	return &enc, nil
@@ -193,7 +193,7 @@ func (c *Config) UnmarshalTOML(unmarshal func(interface{}) error) error {
 		RPCEVMTimeout           *time.Duration
 		RPCTxFeeCap             *float64
 		OverrideCancun          *uint64 `toml:",omitempty"`
-		OverrideHaber           *uint64 `toml:",omitempty"`
+		OverrideAthena           *uint64 `toml:",omitempty"`
 		OverrideVerkle          *uint64 `toml:",omitempty"`
 		BlobExtraReserve        *uint64
 	}
@@ -363,8 +363,8 @@ func (c *Config) UnmarshalTOML(unmarshal func(interface{}) error) error {
 	if dec.OverrideCancun != nil {
 		c.OverrideCancun = dec.OverrideCancun
 	}
-	if dec.OverrideHaber != nil {
-		c.OverrideHaber = dec.OverrideHaber
+	if dec.OverrideAthena != nil {
+		c.OverrideAthena = dec.OverrideAthena
 	}
 	if dec.OverrideVerkle != nil {
 		c.OverrideVerkle = dec.OverrideVerkle

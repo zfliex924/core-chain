@@ -428,7 +428,7 @@ type ChainConfig struct {
 	KeplerTime   *uint64 `json:"keplerTime,omitempty"`    // Kepler switch time (nil = no fork, 0 = already activated)
 	DemeterTime  *uint64 `json:"demeterTime,omitempty" `  // Demeter switch time (nil = no fork, 0 = already on demeter)
 	CancunTime   *uint64 `json:"cancunTime,omitempty" `   // Cancun switch time (nil = no fork, 0 = already on cancun)
-	HaberTime    *uint64 `json:"haberTime,omitempty"`     // Haber switch time (nil = no fork, 0 = already on haber)
+	AthenaTime   *uint64 `json:"athenaTime,omitempty"`    // Athena switch time (nil = no fork, 0 = already on athena)
 	PragueTime   *uint64 `json:"pragueTime,omitempty" `   // Prague switch time (nil = no fork, 0 = already on prague)
 	VerkleTime   *uint64 `json:"verkleTime,omitempty" `   // Verkle switch time (nil = no fork, 0 = already on verkle)
 
@@ -524,12 +524,12 @@ func (c *ChainConfig) String() string {
 		CancunTime = big.NewInt(0).SetUint64(*c.CancunTime)
 	}
 
-	var HaberTime *big.Int
-	if c.HaberTime != nil {
-		HaberTime = big.NewInt(0).SetUint64(*c.HaberTime)
+	var AthenaTime *big.Int
+	if c.AthenaTime != nil {
+		AthenaTime = big.NewInt(0).SetUint64(*c.AthenaTime)
 	}
 
-	return fmt.Sprintf("{ChainID: %v Homestead: %v DAO: %v DAOSupport: %v EIP150: %v EIP155: %v EIP158: %v Byzantium: %v Constantinople: %v Petersburg: %v Istanbul: %v, Muir Glacier: %v, Berlin: %v, YOLO v3: %v, London: %v, HashPower: %v, Zeus: %v, Hera: %v, Poseidon: %v, Luban: %v, Plato: %v, Hertz: %v, ShanghaiTime: %v, KeplerTime: %v, DemeterTime: %v, CancunTime: %v, HaberTime: %v, Engine: %v}",
+	return fmt.Sprintf("{ChainID: %v Homestead: %v DAO: %v DAOSupport: %v EIP150: %v EIP155: %v EIP158: %v Byzantium: %v Constantinople: %v Petersburg: %v Istanbul: %v, Muir Glacier: %v, Berlin: %v, YOLO v3: %v, London: %v, HashPower: %v, Zeus: %v, Hera: %v, Poseidon: %v, Luban: %v, Plato: %v, Hertz: %v, ShanghaiTime: %v, KeplerTime: %v, DemeterTime: %v, CancunTime: %v, AthenaTime: %v, Engine: %v}",
 		c.ChainID,
 		c.HomesteadBlock,
 		c.DAOForkBlock,
@@ -556,7 +556,7 @@ func (c *ChainConfig) String() string {
 		KeplerTime,
 		DemeterTime,
 		CancunTime,
-		HaberTime,
+		AthenaTime,
 		engine,
 	)
 }
@@ -750,9 +750,9 @@ func (c *ChainConfig) IsCancun(num *big.Int, time uint64) bool {
 	return c.IsLondon(num) && isTimestampForked(c.CancunTime, time)
 }
 
-// IsHaber returns whether time is either equal to the Haber fork time or greater.
-func (c *ChainConfig) IsHaber(num *big.Int, time uint64) bool {
-	return c.IsLondon(num) && isTimestampForked(c.HaberTime, time)
+// IsAthena returns whether time is either equal to the Athena fork time or greater.
+func (c *ChainConfig) IsAthena(num *big.Int, time uint64) bool {
+	return c.IsLondon(num) && isTimestampForked(c.AthenaTime, time)
 }
 
 // IsPrague returns whether num is either equal to the Prague fork time or greater.
@@ -813,7 +813,7 @@ func (c *ChainConfig) CheckConfigForkOrder() error {
 		{name: "keplerTime", timestamp: c.KeplerTime},
 		{name: "demeterTime", timestamp: c.DemeterTime},
 		{name: "cancunTime", timestamp: c.CancunTime},
-		{name: "haberTime", timestamp: c.HaberTime},
+		{name: "athenaTime", timestamp: c.AthenaTime},
 		{name: "pragueTime", timestamp: c.PragueTime, optional: true},
 		{name: "verkleTime", timestamp: c.VerkleTime, optional: true},
 	} {
@@ -1116,7 +1116,7 @@ type Rules struct {
 	IsBerlin, IsLondon                                      bool
 	IsMerge                                                 bool
 	IsHashPower                                             bool
-	IsShanghai, IsKepler, IsCancun, IsHaber                 bool
+	IsShanghai, IsKepler, IsCancun, IsAthena                bool
 	IsPrague, IsVerkle                                      bool
 }
 
@@ -1145,7 +1145,7 @@ func (c *ChainConfig) Rules(num *big.Int, isMerge bool, timestamp uint64) Rules 
 		IsShanghai:       c.IsShanghai(num, timestamp),
 		IsKepler:         c.IsKepler(num, timestamp),
 		IsCancun:         c.IsCancun(num, timestamp),
-		IsHaber:          c.IsHaber(num, timestamp),
+		IsAthena:         c.IsAthena(num, timestamp),
 		IsPrague:         c.IsPrague(num, timestamp),
 		IsVerkle:         c.IsVerkle(num, timestamp),
 	}

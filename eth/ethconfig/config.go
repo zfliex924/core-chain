@@ -191,8 +191,8 @@ type Config struct {
 	// OverrideCancun (TODO: remove after the fork)
 	OverrideCancun *uint64 `toml:",omitempty"`
 
-	// OverrideHaber (TODO: remove after the fork)
-	OverrideHaber *uint64 `toml:",omitempty"`
+	// OverrideAthena (TODO: remove after the fork)
+	OverrideAthena *uint64 `toml:",omitempty"`
 
 	// OverrideVerkle (TODO: remove after the fork)
 	OverrideVerkle *uint64 `toml:",omitempty"`
