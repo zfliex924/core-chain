@@ -212,16 +212,16 @@ var (
 		TheseusTime:         newUint64(1748592000), // 2025-05-30 08:00:00 AM UTC
 		CancunTime:          newUint64(1748592000), // 2025-05-30 08:00:00 AM UTC
 		TheseusFixTime:      newUint64(1752652800), // 2025-07-16 08:00:00 AM UTC
-		LubanTime:           newUint64(1758870000),
-		PlatoTime:           newUint64(1758870000),
-		BohrTime:            newUint64(1758870000),
-		PascalTime:          newUint64(1758870000),
-		PragueTime:          newUint64(1758870000),
-		HermesTime:          newUint64(1758870000),
+		LubanTime:           newUint64(1758875700),
+		PlatoTime:           newUint64(1758875700),
+		BohrTime:            newUint64(1758875700),
+		PascalTime:          newUint64(1758875700),
+		PragueTime:          newUint64(1758875700),
+		HermesTime:          newUint64(1758875700),
 		Satoshi: &SatoshiConfig{
 			Period: 3,
-			Epoch:  200,
-			Round:  86400,
+			Epoch:  50,
+			Round:  1800,
 		},
 		BlobScheduleConfig: &BlobScheduleConfig{
 			Cancun: DefaultCancunBlobConfig,
