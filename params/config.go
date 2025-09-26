@@ -188,7 +188,7 @@ var (
 	}
 
 	PigeonChainConfig = &ChainConfig{
-		ChainID:             big.NewInt(1114),
+		ChainID:             big.NewInt(1111),
 		HomesteadBlock:      big.NewInt(0),
 		EIP150Block:         big.NewInt(0),
 		EIP155Block:         big.NewInt(0),
@@ -212,12 +212,12 @@ var (
 		TheseusTime:         newUint64(1748592000), // 2025-05-30 08:00:00 AM UTC
 		CancunTime:          newUint64(1748592000), // 2025-05-30 08:00:00 AM UTC
 		TheseusFixTime:      newUint64(1752652800), // 2025-07-16 08:00:00 AM UTC
-		LubanTime:           newUint64(1758868800),
-		PlatoTime:           newUint64(1758868800),
-		BohrTime:            newUint64(1758868800),
-		PascalTime:          newUint64(1758868800),
-		PragueTime:          newUint64(1758868800),
-		HermesTime:          newUint64(1758868800),
+		LubanTime:           newUint64(1758870000),
+		PlatoTime:           newUint64(1758870000),
+		BohrTime:            newUint64(1758870000),
+		PascalTime:          newUint64(1758870000),
+		PragueTime:          newUint64(1758870000),
+		HermesTime:          newUint64(1758870000),
 		Satoshi: &SatoshiConfig{
 			Period: 3,
 			Epoch:  200,
