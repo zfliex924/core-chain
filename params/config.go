@@ -208,10 +208,10 @@ var (
 		ShanghaiTime:        newUint64(0),
 		KeplerTime:          newUint64(0),
 		DemeterTime:         newUint64(0),
-		AthenaTime:          newUint64(1737079200),
-		TheseusTime:         newUint64(1748592000), // 2025-05-30 08:00:00 AM UTC
-		CancunTime:          newUint64(1748592000), // 2025-05-30 08:00:00 AM UTC
-		TheseusFixTime:      newUint64(1752652800), // 2025-07-16 08:00:00 AM UTC
+		AthenaTime:          newUint64(0),
+		TheseusTime:         newUint64(0), // 2025-05-30 08:00:00 AM UTC
+		CancunTime:          newUint64(0), // 2025-05-30 08:00:00 AM UTC
+		TheseusFixTime:      newUint64(0), // 2025-07-16 08:00:00 AM UTC
 		LubanTime:           newUint64(1758875700),
 		PlatoTime:           newUint64(1758875700),
 		BohrTime:            newUint64(1758875700),
