@@ -220,7 +220,7 @@ var (
 		HermesTime:          newUint64(1759113600),
 		Satoshi: &SatoshiConfig{
 			Period: 3,
-			Epoch:  20,
+			Epoch:  50,
 			Round:  1800,
 		},
 		BlobScheduleConfig: &BlobScheduleConfig{
