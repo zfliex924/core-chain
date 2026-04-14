@@ -157,6 +157,14 @@ const (
 	IdentityPerWordGas          uint64 = 3     // Per-work price for a data copy operation
 	BlsSignatureVerifyBaseGas   uint64 = 1000  // base price for a BLS signature verify operation
 	BlsSignatureVerifyPerKeyGas uint64 = 3500  // Per-key price for a BLS signature verify operation
+	EquihashVerifyBaseGas       uint64 = 2000   // Base price for an Equihash verify operation
+	EquihashVerifyPerInputGas   uint64 = 10    // Per-input price for an Equihash verify operation
+	Blake2bBaseGas              uint64 = 12   // Base price for a BLAKE2b-256 operation
+	Blake2bPerWordGas           uint64 = 3    // Per-word price for a BLAKE2b-256 operation
+	PedersenBaseGas             uint64 = 100  // Base price for a Pedersen hash operation
+	PedersenPerChunkGas         uint64 = 120  // Per-chunk (31 bytes) price for a Pedersen hash operation
+	Groth16VerifyBaseGas        uint64 = 45000 // Base price for a Groth16 proof verification (4 pairings)
+	Groth16VerifyPerInputGas    uint64 = 1000  // Per-public-input price for Groth16 verification
 	DoubleSignEvidenceVerifyGas uint64 = 10000 // Gas for verify double sign evidence
 
 	Bn256AddGasByzantium             uint64 = 500    // Byzantium gas needed for an elliptic curve addition
