@@ -254,6 +254,12 @@ func buildFlags(env build.Environment, staticLinking bool, buildTags []string) (
 	// and there is no downside to this, so we just keep doing it.
 	if runtime.GOOS == "darwin" {
 		ld = append(ld, "-s")
+		// Suppress duplicate -lc++ warnings from Apple ld (Xcode 15+).
+		// This arises because CGO C++ compilation implicitly links libc++ via
+		// the c++ linker frontend, while some dependencies (e.g. bls-eth-go-binary)
+		// also request -lstdc++ which Apple ld resolves to the same library.
+		extld := []string{"-Wl,-no_warn_duplicate_libraries"}
+		ld = append(ld, "-extldflags", "'"+strings.Join(extld, " ")+"'")
 	}
 	if runtime.GOOS == "linux" {
 		// Enforce the stacksize to 8M, which is the case on most platforms apart from
