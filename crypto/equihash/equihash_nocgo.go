@@ -32,3 +32,11 @@ func Verify(n, k uint32, seed []byte, nonce uint32, inputs []uint32) bool {
 func VerifyProof(p *Proof) bool {
 	return false
 }
+
+func ExpandZcashSolution(n, k uint32, packed []byte) ([]uint32, error) {
+	return nil, errors.New("equihash: not available without cgo")
+}
+
+func VerifyZcash(n, k uint32, header []byte, inputs []uint32) bool {
+	return false
+}

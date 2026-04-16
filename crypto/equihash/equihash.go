@@ -17,6 +17,7 @@ import "C"
 import (
 	"encoding/binary"
 	"errors"
+	"fmt"
 	"unsafe"
 )
 
@@ -101,6 +102,60 @@ func VerifyProof(p *Proof) bool {
 		return false
 	}
 	return Verify(p.N, p.K, p.Seed, p.Nonce, p.Inputs)
+}
+
+// ExpandZcashSolution unpacks a Zcash bit-packed equihash solution into a
+// slice of uint32 indices. Zcash stores indices MSB-first with
+// bitLen = n/(k+1)+1 bits each (e.g. 21 bits for n=200, k=9).
+func ExpandZcashSolution(n, k uint32, packed []byte) ([]uint32, error) {
+	bitLen := n/(k+1) + 1
+	numIndices := uint32(1) << k
+	expectedBytes := (bitLen*numIndices + 7) / 8
+	if uint32(len(packed)) != expectedBytes {
+		return nil, fmt.Errorf("equihash: expected %d solution bytes, got %d",
+			expectedBytes, len(packed))
+	}
+
+	mask := uint64((1 << bitLen) - 1)
+	var acc uint64
+	accBits := uint32(0)
+	indices := make([]uint32, 0, numIndices)
+
+	for _, b := range packed {
+		acc = (acc << 8) | uint64(b)
+		accBits += 8
+		if accBits >= bitLen {
+			accBits -= bitLen
+			indices = append(indices, uint32((acc>>accBits)&mask))
+		}
+	}
+	if uint32(len(indices)) != numIndices {
+		return nil, fmt.Errorf("equihash: expected %d indices, got %d",
+			numIndices, len(indices))
+	}
+	return indices, nil
+}
+
+// VerifyZcash verifies an Equihash proof using Zcash's personalized-Blake2b
+// variant (person = "ZcashPoW" + LE32(n) + LE32(k)).
+//
+// header must be the raw block-header bytes up to and including nNonce
+// (140 bytes for Zcash mainnet/testnet), and inputs must already be expanded
+// via ExpandZcashSolution.
+func VerifyZcash(n, k uint32, header []byte, inputs []uint32) bool {
+	if len(header) == 0 || len(inputs) == 0 || n == 0 || k == 0 {
+		return false
+	}
+
+	result := C.equihash_verify_zcash(
+		C.uint32_t(n),
+		C.uint32_t(k),
+		(*C.uint8_t)(unsafe.Pointer(&header[0])),
+		C.uint32_t(len(header)),
+		(*C.uint32_t)(unsafe.Pointer(&inputs[0])),
+		C.uint32_t(len(inputs)),
+	)
+	return result != 0
 }
 
 func bytesToUint32s(b []byte) []uint32 {
