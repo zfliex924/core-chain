@@ -38,7 +38,7 @@ import (
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/core/vm"
 	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/eth/feemarket"
+
 	"github.com/ethereum/go-ethereum/ethdb"
 	"github.com/ethereum/go-ethereum/internal/ethapi"
 	"github.com/ethereum/go-ethereum/log"
@@ -102,22 +102,17 @@ var (
 		common.HexToAddress(systemcontracts.ValidatorContract):       true,
 		common.HexToAddress(systemcontracts.SlashContract):           true,
 		common.HexToAddress(systemcontracts.SystemRewardContract):    true,
-		common.HexToAddress(systemcontracts.LightClientContract):     true,
 		common.HexToAddress(systemcontracts.RelayerHubContract):      true,
 		common.HexToAddress(systemcontracts.CandidateHubContract):    true,
 		common.HexToAddress(systemcontracts.GovHubContract):          true,
-		common.HexToAddress(systemcontracts.PledgeCandidateContract): true,
-		common.HexToAddress(systemcontracts.BurnContract):            true,
 		common.HexToAddress(systemcontracts.FoundationContract):      true,
 		common.HexToAddress(systemcontracts.StakeHubContract):        true,
-		common.HexToAddress(systemcontracts.CoreAgentContract):       true,
+		common.HexToAddress(systemcontracts.NativeAgentContract):     true,
 		common.HexToAddress(systemcontracts.HashAgentContract):       true,
-		common.HexToAddress(systemcontracts.BTCAgentContract):        true,
-		common.HexToAddress(systemcontracts.BTCStakeContract):        true,
-		common.HexToAddress(systemcontracts.BTCLSTStakeContract):     true,
-		common.HexToAddress(systemcontracts.BTCLSTTokenContract):     true,
-		common.HexToAddress(systemcontracts.FeeMarketContract):       true,
 		common.HexToAddress(systemcontracts.ChannelContract):         true,
+		common.HexToAddress(systemcontracts.ZECLightClientContract):  true,
+		common.HexToAddress(systemcontracts.ZECAgentContract):        true,
+		common.HexToAddress(systemcontracts.GradeManagerContract):    true,
 	}
 )
 
@@ -1245,30 +1240,14 @@ func (p *Satoshi) BeforeValidateTx(chain consensus.ChainHeaderReader, header *ty
 	cx := chainContext{Chain: chain, satoshi: p}
 
 	parent := chain.GetHeaderByHash(header.ParentHash)
-	isOnDemeter := p.chainConfig.IsOnDemeter(header.Number, parent.Time, header.Time)
-	isOnTheseus := p.chainConfig.IsOnTheseus(header.Number, parent.Time, header.Time)
 	isOnHermes := p.chainConfig.IsOnHermes(header.Number, parent.Time, header.Time)
-	if isOnDemeter || isOnTheseus || isOnHermes {
-		contracts := []string{}
-		if isOnDemeter {
-			contracts = append(contracts, systemcontracts.StakeHubContract)
-			contracts = append(contracts, systemcontracts.CoreAgentContract)
-			contracts = append(contracts, systemcontracts.HashAgentContract)
-			contracts = append(contracts, systemcontracts.BTCAgentContract)
-			contracts = append(contracts, systemcontracts.BTCStakeContract)
-			contracts = append(contracts, systemcontracts.BTCLSTStakeContract)
-			contracts = append(contracts, systemcontracts.BTCLSTTokenContract)
+	if isOnHermes {
+		contracts := []string{
+			systemcontracts.ChannelContract,
 		}
-		if isOnTheseus {
-			contracts = append(contracts, systemcontracts.FeeMarketContract)
-		}
-		if isOnHermes {
-			contracts = append(contracts, systemcontracts.ChannelContract)
-		}
-
 		err = p.initContractWithContracts(state, header, cx, txs, receipts, systemTxs, usedGas, false, contracts, tracer)
 		if err != nil {
-			log.Error("init contract failed on demeter fork")
+			log.Error("init contract failed on hermes fork")
 		}
 	}
 
@@ -1297,30 +1276,14 @@ func (p *Satoshi) BeforePackTx(chain consensus.ChainHeaderReader, header *types.
 	cx := chainContext{Chain: chain, satoshi: p}
 
 	parent := chain.GetHeaderByHash(header.ParentHash)
-	isOnDemeter := p.chainConfig.IsOnDemeter(header.Number, parent.Time, header.Time)
-	isOnTheseus := p.chainConfig.IsOnTheseus(header.Number, parent.Time, header.Time)
 	isOnHermes := p.chainConfig.IsOnHermes(header.Number, parent.Time, header.Time)
-	if isOnDemeter || isOnTheseus || isOnHermes {
-		contracts := []string{}
-		if isOnDemeter {
-			contracts = append(contracts, systemcontracts.StakeHubContract)
-			contracts = append(contracts, systemcontracts.CoreAgentContract)
-			contracts = append(contracts, systemcontracts.HashAgentContract)
-			contracts = append(contracts, systemcontracts.BTCAgentContract)
-			contracts = append(contracts, systemcontracts.BTCStakeContract)
-			contracts = append(contracts, systemcontracts.BTCLSTStakeContract)
-			contracts = append(contracts, systemcontracts.BTCLSTTokenContract)
+	if isOnHermes {
+		contracts := []string{
+			systemcontracts.ChannelContract,
 		}
-		if isOnTheseus {
-			contracts = append(contracts, systemcontracts.FeeMarketContract)
-		}
-		if isOnHermes {
-			contracts = append(contracts, systemcontracts.ChannelContract)
-		}
-
 		err = p.initContractWithContracts(state, header, cx, txs, receipts, nil, &header.GasUsed, true, contracts, tracer)
 		if err != nil {
-			log.Error("init contract failed on demeter fork")
+			log.Error("init contract failed on hermes fork")
 		}
 	}
 
@@ -1547,9 +1510,6 @@ func (p *Satoshi) FinalizeAndAssemble(chain consensus.ChainHeaderReader, header 
 	// No block rewards in PoA, so the state remains as is and uncles are dropped
 	cx := chainContext{Chain: chain, satoshi: p}
 
-	if bc, ok := chain.(*core.BlockChain); ok {
-		cx.feemarket = bc.FeeMarket()
-	}
 	if body.Transactions == nil {
 		body.Transactions = make([]*types.Transaction, 0)
 	}
@@ -2079,29 +2039,20 @@ func (p *Satoshi) initContract(state vm.StateDB, header *types.Header, chain cor
 		systemcontracts.ValidatorContract,
 		systemcontracts.SlashContract,
 		systemcontracts.SystemRewardContract,
-		systemcontracts.LightClientContract,
 		systemcontracts.RelayerHubContract,
 		systemcontracts.CandidateHubContract,
 		systemcontracts.GovHubContract,
-		systemcontracts.PledgeCandidateContract,
-		systemcontracts.BurnContract,
+		systemcontracts.FoundationContract,
+		systemcontracts.StakeHubContract,
+		systemcontracts.NativeAgentContract,
+		systemcontracts.HashAgentContract,
 	}
 
-	if p.chainConfig.IsDemeter(header.Number, header.Time) {
-		contracts = append(contracts, systemcontracts.StakeHubContract)
-		contracts = append(contracts, systemcontracts.CoreAgentContract)
-		contracts = append(contracts, systemcontracts.HashAgentContract)
-		contracts = append(contracts, systemcontracts.BTCAgentContract)
-		contracts = append(contracts, systemcontracts.BTCStakeContract)
-		contracts = append(contracts, systemcontracts.BTCLSTStakeContract)
-		contracts = append(contracts, systemcontracts.BTCLSTTokenContract)
-	}
-	if p.chainConfig.IsTheseus(header.Number, header.Time) {
-		contracts = append(contracts, systemcontracts.FeeMarketContract)
-	}
 	if p.chainConfig.IsHermes(header.Number, header.Time) {
 		contracts = append(contracts, systemcontracts.ChannelContract)
 	}
+	// TODO: add ZECLightClientContract, ZECAgentContract, GradeManagerContract
+	// once their contract bytecodes are ready and a new fork is configured.
 
 	return p.initContractWithContracts(state, header, chain, txs, receipts, receivedTxs, usedGas, mining, contracts, tracer)
 }
@@ -2248,11 +2199,8 @@ func (p *Satoshi) applyTransaction(
 	tracingReceipt = types.NewReceipt(root, false, *usedGas)
 	tracingReceipt.TxHash = expectedTx.Hash()
 	tracingReceipt.GasUsed = gasUsed
-	if p.chainConfig.IsTheseus(header.Number, header.Time) {
-		tracingReceipt.DistributedGas = 0
-		if len(*receipts) > 0 {
-			tracingReceipt.CumulativeGasUsed = (*receipts)[len(*receipts)-1].CumulativeGasUsed + gasUsed
-		}
+	if len(*receipts) > 0 {
+		tracingReceipt.CumulativeGasUsed = (*receipts)[len(*receipts)-1].CumulativeGasUsed + gasUsed
 	}
 
 	// Set the receipt logs and create a bloom for filtering
@@ -2470,9 +2418,8 @@ func (p *Satoshi) NextProposalBlock(chain consensus.ChainHeaderReader, header *t
 
 // chain context
 type chainContext struct {
-	Chain     consensus.ChainHeaderReader
-	satoshi   consensus.Engine
-	feemarket *feemarket.FeeMarket
+	Chain   consensus.ChainHeaderReader
+	satoshi consensus.Engine
 }
 
 func (c chainContext) Engine() consensus.Engine {
@@ -2485,10 +2432,6 @@ func (c chainContext) GetHeader(hash common.Hash, number uint64) *types.Header {
 
 func (c chainContext) Config() *params.ChainConfig {
 	return c.Chain.Config()
-}
-
-func (c chainContext) FeeMarket() *feemarket.FeeMarket {
-	return c.feemarket
 }
 
 // apply message

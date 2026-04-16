@@ -32,7 +32,7 @@ import (
 	"github.com/ethereum/go-ethereum/core/state/snapshot"
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/eth/ethconfig"
-	"github.com/ethereum/go-ethereum/eth/feemarket"
+
 	"github.com/ethereum/go-ethereum/eth/protocols/snap"
 	"github.com/ethereum/go-ethereum/ethdb"
 	"github.com/ethereum/go-ethereum/event"
@@ -218,8 +218,6 @@ type BlockChain interface {
 	// AncientTail retrieves the tail the ancients blocks
 	AncientTail() (uint64, error)
 
-	// FeeMarket returns the fee market provider
-	FeeMarket() *feemarket.FeeMarket
 }
 
 type DownloadOption func(downloader *Downloader) *Downloader

@@ -28,7 +28,7 @@ import (
 	"github.com/ethereum/go-ethereum/consensus"
 	"github.com/ethereum/go-ethereum/core/rawdb"
 	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/eth/feemarket"
+
 	"github.com/ethereum/go-ethereum/ethdb"
 	"github.com/ethereum/go-ethereum/log"
 	"github.com/ethereum/go-ethereum/params"
@@ -72,13 +72,11 @@ type HeaderChain struct {
 	procInterrupt func() bool
 	engine        consensus.Engine
 
-	// Fee market provider for discount calculations
-	feeMarket *feemarket.FeeMarket
 }
 
 // NewHeaderChain creates a new HeaderChain structure. ProcInterrupt points
 // to the parent's interrupt semaphore.
-func NewHeaderChain(chainDb ethdb.Database, config *params.ChainConfig, engine consensus.Engine, feeMarket *feemarket.FeeMarket, procInterrupt func() bool) (*HeaderChain, error) {
+func NewHeaderChain(chainDb ethdb.Database, config *params.ChainConfig, engine consensus.Engine, procInterrupt func() bool) (*HeaderChain, error) {
 	hc := &HeaderChain{
 		config:        config,
 		chainDb:       chainDb,
@@ -87,7 +85,6 @@ func NewHeaderChain(chainDb ethdb.Database, config *params.ChainConfig, engine c
 		numberCache:   lru.NewCache[common.Hash, uint64](numberCacheLimit),
 		procInterrupt: procInterrupt,
 		engine:        engine,
-		feeMarket:     feeMarket,
 	}
 	hc.genesisHeader = hc.GetHeaderByNumber(0)
 	if hc.genesisHeader == nil {
@@ -762,9 +759,6 @@ func (hc *HeaderChain) Config() *params.ChainConfig { return hc.config }
 
 // Engine retrieves the header chain's consensus engine.
 func (hc *HeaderChain) Engine() consensus.Engine { return hc.engine }
-
-// FeeMarket provider for retrieving configurations
-func (hc *HeaderChain) FeeMarket() *feemarket.FeeMarket { return hc.feeMarket }
 
 // GetBlock implements consensus.ChainReader, and returns nil for every input as
 // a header chain does not have blocks available for retrieval.

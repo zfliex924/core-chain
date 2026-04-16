@@ -27,7 +27,6 @@ import (
 	"github.com/ethereum/go-ethereum/core/tracing"
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/eth/feemarket"
 	"github.com/ethereum/go-ethereum/params"
 	"github.com/holiman/uint256"
 )
@@ -73,9 +72,6 @@ type BlockContext struct {
 	BaseFee     *big.Int       // Provides information for BASEFEE (0 if vm runs with NoBaseFee flag and 0 gas price)
 	BlobBaseFee *big.Int       // Provides information for BLOBBASEFEE (0 if vm runs with NoBaseFee flag and 0 blob gas price)
 	Random      *common.Hash   // Provides information for PREVRANDAO
-
-	// Fee market provider for discount calculations
-	FeeMarket *feemarket.FeeMarket
 }
 
 // TxContext provides the EVM with information about a transaction.
@@ -125,7 +121,7 @@ type EVM struct {
 	callGasTemp uint64
 	// precompiles holds the precompiled contracts for the current epoch
 	precompiles map[common.Address]PrecompiledContract
-	// initialSnapshot is used to track the outer snapshot for the EVM interpreter for reverting during feemarket distributions, if needed.
+	// initialSnapshot is used to track the outer snapshot for the EVM interpreter.
 	// -1 means no outer snapshot is set.
 	initialSnapshot int
 }
