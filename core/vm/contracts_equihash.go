@@ -5,7 +5,7 @@ import (
 	"github.com/ethereum/go-ethereum/params"
 )
 
-// equihashVerify implements Equihash proof verification as a native precompiled contract.
+// zcashEquihashVerify implements Equihash proof verification as a native precompiled contract.
 //
 // Input format (raw Zcash block, as sent by ZcashLightClient.sol):
 //
@@ -14,7 +14,7 @@ import (
 // Equihash parameters n=200, k=9 are implied (Zcash mainnet / testnet).
 // Total input length must be exactly 1487 bytes.
 // Returns 0x01 if the proof is valid, 0x00 if invalid.
-type equihashVerify struct{}
+type zcashEquihashVerify struct{}
 
 const (
 	zcashN           = uint32(200)
@@ -27,12 +27,12 @@ const (
 )
 
 // RequiredGas returns the gas required to execute the pre-compiled contract.
-func (c *equihashVerify) RequiredGas(input []byte) uint64 {
+func (c *zcashEquihashVerify) RequiredGas(input []byte) uint64 {
 	return params.EquihashVerifyBaseGas + zcashNumInputs*params.EquihashVerifyPerInputGas
 }
 
 // Run verifies an Equihash 200/9 proof embedded in a raw Zcash block header.
-func (c *equihashVerify) Run(input []byte) ([]byte, error) {
+func (c *zcashEquihashVerify) Run(input []byte) ([]byte, error) {
 	if len(input) != zcashInputLen {
 		return nil, ErrExecutionReverted
 	}

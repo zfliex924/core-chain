@@ -32,7 +32,7 @@ func TestEquihashVerifyZcashBlock(t *testing.T) {
 		t.Fatalf("unexpected raw length %d (want %d)", len(raw), zcashInputLen)
 	}
 
-	c := &equihashVerify{}
+	c := &zcashEquihashVerify{}
 	result, err := c.Run(raw)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
@@ -43,7 +43,7 @@ func TestEquihashVerifyZcashBlock(t *testing.T) {
 }
 
 func TestEquihashVerifyInvalidInput(t *testing.T) {
-	c := &equihashVerify{}
+	c := &zcashEquihashVerify{}
 
 	tests := []struct {
 		name  string
@@ -70,7 +70,7 @@ func TestEquihashVerifyInvalidInput(t *testing.T) {
 }
 
 func TestEquihashVerifyRequiredGas(t *testing.T) {
-	c := &equihashVerify{}
+	c := &zcashEquihashVerify{}
 	expected := params.EquihashVerifyBaseGas + zcashNumInputs*params.EquihashVerifyPerInputGas
 	if gas := c.RequiredGas(nil); gas != expected {
 		t.Fatalf("gas mismatch: got %d, expected %d", gas, expected)

@@ -169,8 +169,8 @@ var PrecompiledContractsSatoshiHashPower = map[common.Address]PrecompiledContrac
 // PrecompiledContractsSatoshiPrague contains the default set of pre-compiled contracts from Prague.
 var PrecompiledContractsSatoshiPrague = map[common.Address]PrecompiledContract{
 	common.BytesToAddress([]byte{0x65}): &blsSignatureVerify{},
-	common.BytesToAddress([]byte{0x67}): &blake2bHash{},
-	common.BytesToAddress([]byte{0x68}): &equihashVerify{},
+	common.BytesToAddress([]byte{0x67}): &blake2bPersonalHash{},
+	common.BytesToAddress([]byte{0x68}): &zcashEquihashVerify{},
 	common.BytesToAddress([]byte{0x69}): &pedersenHash{},
 	common.BytesToAddress([]byte{0x6a}): &groth16Verify{},
 }
