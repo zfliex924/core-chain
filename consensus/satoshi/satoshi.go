@@ -2042,17 +2042,14 @@ func (p *Satoshi) initContract(state vm.StateDB, header *types.Header, chain cor
 		systemcontracts.RelayerHubContract,
 		systemcontracts.CandidateHubContract,
 		systemcontracts.GovHubContract,
-		systemcontracts.FoundationContract,
 		systemcontracts.StakeHubContract,
 		systemcontracts.NativeAgentContract,
 		systemcontracts.HashAgentContract,
+		systemcontracts.ChannelContract,
+		systemcontracts.ZECLightClientContract,
+		systemcontracts.ZECAgentContract,
+		systemcontracts.GradeManagerContract,
 	}
-
-	if p.chainConfig.IsHermes(header.Number, header.Time) {
-		contracts = append(contracts, systemcontracts.ChannelContract)
-	}
-	// TODO: add ZECLightClientContract, ZECAgentContract, GradeManagerContract
-	// once their contract bytecodes are ready and a new fork is configured.
 
 	return p.initContractWithContracts(state, header, chain, txs, receipts, receivedTxs, usedGas, mining, contracts, tracer)
 }
