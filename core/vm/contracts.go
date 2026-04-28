@@ -173,6 +173,8 @@ var PrecompiledContractsSatoshiPrague = map[common.Address]PrecompiledContract{
 	common.BytesToAddress([]byte{0x68}): &zcashEquihashVerify{},
 	common.BytesToAddress([]byte{0x69}): &pedersenHash{},
 	common.BytesToAddress([]byte{0x6a}): &groth16Verify{},
+	common.BytesToAddress([]byte{0x6b}): &poseidonT3{},
+	common.BytesToAddress([]byte{0x6c}): &poseidonT4{},
 }
 
 var (

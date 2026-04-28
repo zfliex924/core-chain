@@ -163,6 +163,8 @@ const (
 	PedersenPerChunkGas         uint64 = 120  // Per-chunk (31 bytes) price for a Pedersen hash operation
 	Groth16VerifyBaseGas        uint64 = 45000 // Base price for a Groth16 proof verification (4 pairings)
 	Groth16VerifyPerInputGas    uint64 = 1000  // Per-public-input price for Groth16 verification
+	PoseidonT3Gas               uint64 = 1500  // Gas for a Poseidon hash with 2 inputs (t=3, BN254)
+	PoseidonT4Gas               uint64 = 2000  // Gas for a Poseidon hash with 3 inputs (t=4, BN254)
 	DoubleSignEvidenceVerifyGas uint64 = 10000 // Gas for verify double sign evidence
 
 	Bn256AddGasByzantium             uint64 = 500    // Byzantium gas needed for an elliptic curve addition
