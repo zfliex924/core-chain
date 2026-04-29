@@ -113,6 +113,7 @@ var (
 		common.HexToAddress(systemcontracts.ZECLightClientContract):  true,
 		common.HexToAddress(systemcontracts.ZECAgentContract):        true,
 		common.HexToAddress(systemcontracts.GradeManagerContract):    true,
+		common.HexToAddress(systemcontracts.MASPContract):            true,
 	}
 )
 
@@ -2049,6 +2050,7 @@ func (p *Satoshi) initContract(state vm.StateDB, header *types.Header, chain cor
 		systemcontracts.ZECLightClientContract,
 		systemcontracts.ZECAgentContract,
 		systemcontracts.GradeManagerContract,
+		systemcontracts.MASPContract,
 	}
 
 	return p.initContractWithContracts(state, header, chain, txs, receipts, receivedTxs, usedGas, mining, contracts, tracer)
